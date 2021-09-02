@@ -17,8 +17,14 @@ searchButton.addEventListener('click', function(){
       fetch(url)
       .then(res => res.json())
       .then(data =>{
-        hintsFound.innerText =`Hints Found : ${data.numFound}`;     //uptadate Hints found
-        displayData(data.docs)      //call function
+        if(data.numFound === 0){          //handle unexpected input
+          hintsFound.innerText = 'Hints Found : Opps! no hints for you bro.'
+          totalFound.innerText = 'Showing Result : Opps! no result for you bro.'
+        }
+        else{
+          hintsFound.innerText =`Hints Found : ${data.numFound}`;  
+          displayData(data.docs);      //call function
+        }
       })
     }
     
@@ -27,9 +33,8 @@ searchButton.addEventListener('click', function(){
 // <---------------display search result part--------------------------> 
 
 const displayData = books =>{
-    // console.log(books.length)
-    booksContainer.innerHTML = '';      //<----clear previous result
-    books.forEach(book => {
+      booksContainer.innerHTML = '';      //<----clear previous result
+      books.forEach(book => {
         const div = document.createElement('div');
         div.classList.add('col')
         div.innerHTML =`
