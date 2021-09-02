@@ -2,18 +2,30 @@ const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('search-button');
 const booksContainer = document.getElementById('books-container');
 const totalFound = document.getElementById('total-found');
+const hints = document.getElementById('hints')
 
 searchButton.addEventListener('click', function(){
     const search = searchInput.value;
-    const url = `http://openlibrary.org/search.json?q=${search}`
-    fetch(url)
-    .then(res => res.json())
-    .then(data => displayData(data.docs))
-
+                                        //<-----if input empty
+    if(search === ''){           
+      totalFound.innerText = 'Invalid input! Please write something'
+      hints.innerText = 'Invalid input! Please write something'
+    }
+    else{
+      searchInput.value = '';         //<---clear serch Input
+      const url = `http://openlibrary.org/search.json?q=${search}`
+      fetch(url)
+      .then(res => res.json())
+      .then(data => displayData(data.docs))
+    }
+    
 });
+
+// <---------------display search result part--------------------------> 
 
 const displayData = books =>{
     // console.log(books.length)
+    booksContainer.innerHTML = '';      //<----clear previous result
     books.forEach(book => {
         const div = document.createElement('div');
         div.classList.add('col')
@@ -29,8 +41,7 @@ const displayData = books =>{
       </div>
       `
       booksContainer.appendChild(div);
-      totalFound.innerText = `Total Found :${books.length}`;
-        
+      totalFound.innerText = `Showing result :${books.length}`;  //<--update total found result        
     })
 }
 
